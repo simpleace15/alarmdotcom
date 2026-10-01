@@ -1,21 +1,11 @@
+<h4 align="center">⚠️ Community-maintained fork — the upstream project
+(<a href="https://github.com/pyalarmdotcom/alarmdotcom">pyalarmdotcom/alarmdotcom</a>) has paused maintenance.
+This fork carries HA 2026.x compatibility fixes. See <a href="#about-this-fork">About this fork</a>.</h4>
+
 <p align="center"><img src="https://user-images.githubusercontent.com/466460/175781161-dd70c5b4-d45a-4cdb-bf57-d4fd7fbedb0b.png" width="125"></a>
 <h1 align="center">Alarm.com for Home Assistant</h1>
 <p align="center">This is an unofficial project that is not affiliated with Alarm.com</p>
 <br />
-<p align="center">
-  <!-- <a href="https://www.codacy.com/gh/pyalarmdotcom/alarmdotcom/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pyalarmdotcom/alarmdotcom&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/6f557fbc58914ef5914a81ed5e1c3391"/></a> -->
-  <a href="https://github.com/pyalarmdotcom/alarmdotcom/actions/workflows/hassfest.yaml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pyalarmdotcom/alarmdotcom/hassfest.yaml"></a>
-  <a href="https://results.pre-commit.ci/latest/github/pyalarmdotcom/alarmdotcom/main"><img src="https://results.pre-commit.ci/badge/github/pyalarmdotcom/alarmdotcom/master.svg" /></a>
-  <a href="https://github.com/pyalarmdotcom/alarmdotcom/commits/master"><img src="https://img.shields.io/github/commit-activity/y/pyalarmdotcom/alarmdotcom.svg" /></a>
-</p>
-<p align="center">
-  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-41BDF5.svg" /></a>
-  <img alt="HACS Downloads" src="https://img.shields.io/endpoint?url=https%3A%2F%2Flauwbier.nl%2Fhacs%2Falarmdotcom" />
-  <a href="https://github.com/pyalarmdotcom/alarmdotcom/releases"><img src="https://img.shields.io/github/release/pyalarmdotcom/alarmdotcom.svg" /></a>
-  <a href="https://github.com/pyalarmdotcom/alarmdotcom/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/pyalarmdotcom/alarmdotcom"></a>
-  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
-  <a href="https://github.com/charliermarsh/ruff"><img alt="GitHub" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json" /></a>
-</p>
 
 <hr />
 
@@ -66,7 +56,7 @@ Where possible, use local control for smart home devices that are natively suppo
 | Vibration Contact       | Doors, windows, safes, etc. (e.g.: [Honeywell 11](https://www.alarmgrid.com/products/honeywell-11))                                                                                         |
 | Water                   |                                                                                                                                                                                             |
 
-Note that Alarm.com can has multiple designations for each sensor and not all are known to the developers of this integration. If you have one of the above listed devices but don't see it in Home Assistant, [open an issue on GitHub](https://github.com/uvjustin/alarmdotcom/issues/new/choose).
+Note that Alarm.com can has multiple designations for each sensor and not all are known to the developers of this integration. If you have one of the above listed devices but don't see it in Home Assistant, [open an issue on GitHub](../../issues/new/choose).
 
 #### Subsensors
 
@@ -84,7 +74,7 @@ The developers have access to the devices listed below and plan to add support i
 
 #### Help Wanted Devices
 
-If you own one of the below devices and want to help build support, [open an issue on GitHub](https://github.com/uvjustin/alarmdotcom/issues/new/choose).
+If you own one of the below devices and want to help build support, [open an issue on GitHub](../../issues/new/choose).
 
 | Device Type        | Notes                                                                                                                    | Help Needed |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------- |
@@ -100,7 +90,7 @@ If you own one of the below devices and want to help build support, [open an iss
 
 #### Device Blacklist
 
-These devices are known but blocked from appearing in Home Assistant. If you disagree with any of these ing reasons, please [open an issue on GitHub](https://github.com/uvjustin/alarmdotcom/issues/new/choose)!
+These devices are known but blocked from appearing in Home Assistant. If you disagree with any of these ing reasons, please [open an issue on GitHub](../../issues/new/choose)!
 
 | Device Type        | Reason                                                                                                                                                                                                                                                                                                           |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -111,6 +101,33 @@ These devices are known but blocked from appearing in Home Assistant. If you dis
 | Mobile Phones      | Some control panels support PIN-less proximity unlocking via bluetooth (e.g.: [Qolsys IQ Panel 4](https://qolsys.com/bluetooth/)). Paired mobile phones appear in Alarm.com as sensors, but don't provide any useful functions or information for use in Home Assistant (not even malfunction or battery level). |
 | Panic              | Doesn't support state reporting. May be supported in the future.                                                                                                                                                                                                                                                 |
 | Smoke              | Doesn't support state reporting. May be supported in the future.                                                                                                                                                                                                                                                 |
+
+
+## About This Fork
+
+The upstream project ([pyalarmdotcom/alarmdotcom](https://github.com/pyalarmdotcom/alarmdotcom)) paused
+maintenance in August 2026 after its maintainer lost access to an Alarm.com system. Home Assistant's
+2025.12–2026.x releases broke this integration in several ways. This fork is the actively maintained
+line and is based on the [Bonasort-HA](https://github.com/Bonasort-HA/alarmdotcom) fork (v3.0.14.5),
+with the following fixes on top (v3.0.16.0):
+
+- **HA 2026 compat** (from Bonasort v3.0.14.1–.5): entities no longer crash with
+  `AttributeError: '_friendly_name_internal'`, panel states use the supported
+  `AlarmControlPanelState` API, options-flow + config-entry migration fixes, thermostat
+  color-mode/feature migration, websocket push no longer tears down on unknown devices.
+- **Reauth/reconfigure crash fixed** (port of upstream PR #546): reauth on HA 2025.12+ no longer
+  fails with "Unknown error".
+- **From upstream v3.0.15**: correct panel states on HA 2025.11+.
+- **From nulledy v3.0.15.2**: arming/disarming from Home Assistant without a panel code is allowed.
+- **`beautifulsoup4` pinned >= 4.13.4**: fixes `No module named 'bs4._typing'` startup crash on
+  HA 2026.8+ (a stale/partial bs4 install made the loose `>=4.10.0` pin unfixable by HA).
+- Integration now installs this fork's own copy of the `pyalarmdotcomajax` library
+  (the linked fork of [pyalarmdotcom/pyalarmdotcomajax](https://github.com/pyalarmdotcom/pyalarmdotcomajax)
+  in this account) pinned at v0.5.13.2, so library changes can't silently break the integration.
+
+Supported/reported working on: Home Assistant **2026.9** (works back through ~2026.2, forward to 2026.10
+expected). If you're switching from the v4.0.1-beta line, re-configure the integration (settings may
+not carry over).
 
 ## Using the Integration
 
