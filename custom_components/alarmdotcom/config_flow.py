@@ -267,7 +267,17 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
     async def async_step_reauth(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Perform reauth upon an API authentication error."""
         LOGGER.debug("Reauthenticating.")
-        self._existing_entry = await self.async_set_unique_id(self._config_title)
+        # HA 2025.12+: async_set_unique_id() no longer returns the config entry,
+        # and awaiting it crashes the flow ("Unknown error" in the UI, see
+        # pyalarmdotcom/alarmdotcom#537/#546). Resolve the entry from the reauth
+        # flow context instead. Port of upstream PR #546.
+        self._existing_entry = self._get_reauth_entry()
+        if self._existing_entry:
+            # async_step_final checks the title when deciding to update vs create;
+            # keep it coherent for the update path.
+            self._config_title = self._existing_entry.title
+        else:
+            LOGGER.warning("Reauth flow context missing entry_id; proceeding as fresh setup.")
         return await self.async_step_reauth_confirm(user_input)
 
     async def async_step_reauth_confirm(self, user_input: dict[str, Any] | None = None) -> FlowResult:
