@@ -7,7 +7,6 @@ import logging
 from typing import Any, Literal
 
 import aiohttp
-import async_timeout
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_UNIT_OF_MEASUREMENT, CONF_USERNAME
@@ -97,7 +96,9 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
 
             self._controller = AlarmIntegrationController(self.hass, self.config)
 
-            async with async_timeout.timeout(60):
+            # async_timeout (PyPI) is no longer a HA 2026.x core dependency;
+            # asyncio.timeout() is the supported stdlib equivalent (Py 3.11+).
+            async with asyncio.timeout(60):
                 try:
                     await self._controller.initialize_lite(
                         username=self.config[CONF_USERNAME],
